@@ -22,6 +22,12 @@ jobs:
         with:
           node-version: '12.x'
 
+      # Lint code
+      - name: Lint and Fix 💅
+        run: |
+          yarn stylelint:check
+          yarn eslint:check
+
       # Build using react scripts build
       - name: Install and Build 🔧
         run: |
