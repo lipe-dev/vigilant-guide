@@ -22,18 +22,18 @@ jobs:
         with:
           node-version: '12.x'
 
-      # Lint code
-      - name: Lint and Fix 💅
-        run: |
-          yarn stylelint:check
-          yarn eslint:check
-
       # Build using react scripts build
       - name: Install and Build 🔧
         run: |
           yarn install --frozen-lockfile
           yarn build
           touch build/.nojekyll
+          
+      # Lint code
+      - name: Lint and Fix 💅
+        run: |
+          yarn stylelint:check
+          yarn eslint:check
 
       # Deploy with/to github pages
       - name: Deploy 🚀
