@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState, useCallback} from 'react'
 import {useDropzone} from "react-dropzone";
 
 import drawing from '../../assets/Op1.svg'
+import GlobalStyles from "../../components/GlobalStyles/GlobalStyles";
 
 const parser = new DOMParser()
 const serializer = new XMLSerializer()
@@ -117,6 +118,8 @@ const App = () => {
 
     return (
         <div>
+            <GlobalStyles />
+
             <textarea type="text" multiple onChange={changeText} value={text}/>
             <input type="text" onChange={changeLink} value={link}/>
 
