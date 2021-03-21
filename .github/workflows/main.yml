@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -22,24 +22,35 @@ jobs:
         with:
           node-version: '12.x'
 
+      # Install dependencies
+      - name: Install 🔧
+        run: |
+          yarn install --frozen-lockfile
+          
       # Lint code
-      - name: Lint and Fix 💅
+      - name: Eslint and StyleLint 💅
         run: |
           yarn stylelint:check
           yarn eslint:check
-
+          
       # Build using react scripts build
-      - name: Install and Build 🔧
+      - name: Build 🏗️
         run: |
-          yarn install --frozen-lockfile
           yarn build
           touch build/.nojekyll
 
-      # Deploy with/to github pages
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+      # Deploy with/to github pages 
+      - name: Deploy to GH Pages 🚀
+      # You may pin to the exact commit or the version.
+        uses: peaceiris/actions-gh-pages@v3.7.3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
-          CLEAN: true # Auto-Remove deleted files from the deploy branch
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            # Set an input directory for deployment.
+            publish_dir: build
+            # Set Git user.name
+            user_name: Felipe Pereira
+            # Set Git user.email
+            user_email: fe@lipe.dev
+            # Set custom domain
+            cname: lipe.dev/vigilant-guide
+            
