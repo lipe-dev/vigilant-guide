@@ -1,5 +1,6 @@
 {
   "name": "vigilant-guide",
+  "homepage": "https://lipe.dev/vigilant-guide/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
