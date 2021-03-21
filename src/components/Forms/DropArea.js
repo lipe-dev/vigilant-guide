@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 
 const DropArea = styled.div`
-	border: 8px dashed #b6c4ce;
 	width: 100%;
-	text-align: center;
 	padding-top: 32px;
 	padding-bottom: 32px;
+
+	text-align: center;
+
+	border: 8px dashed #b6c4ce;
 `
 
 const Text = styled.p`

@@ -10,7 +10,6 @@ import {
 	TextArea,
 	Label,
 	DropArea,
-	FileUpload,
 	Button,
 } from '../../components/Forms'
 import Preview from '../../components/Preview'
@@ -21,7 +20,6 @@ const serializer = new XMLSerializer()
 const Main = () => {
 	const [link, setLink] = useState('')
 	const [text, setText] = useState('')
-	const [file, setFile] = useState('')
 
 	const [svgString, setSvgString] = useState('')
 
@@ -86,8 +84,6 @@ const Main = () => {
 	}
 
 	const downloadImage = useCallback(() => {
-		console.log(svgString)
-
 		const win = window.URL || window.webkitURL || window
 		const img = new Image()
 		const blob = new Blob([svgString], { type: 'image/svg+xml' })
@@ -121,8 +117,6 @@ const Main = () => {
 
 	const onDrop = useCallback((acceptedFiles) => {
 		acceptedFiles.forEach((file) => {
-			setFile(file.name)
-
 			const reader = new FileReader()
 
 			reader.onabort = () => console.log('file reading was aborted')
@@ -180,16 +174,14 @@ const Main = () => {
 									<Input type='text' onChange={changeLink} value={link} />
 								</Label>
 
-								<Label>
-									Background Image
-									<DropArea {...getRootProps()}>
-										<FileUpload {...getInputProps()} />
-										<DropArea.Text>
-											{file ||
-												`Drag 'n' drop an image here, or click to select a file`}
-										</DropArea.Text>
-									</DropArea>
-								</Label>
+								<Label htmlFor='#fileInput'>Background Image</Label>
+								<DropArea {...getRootProps()}>
+									<input {...getInputProps()} id='fileInput' />
+									<p>
+										{/* eslint-disable-next-line react/no-unescaped-entities */}
+										Drag 'n' drop an image here, or click to select a file
+									</p>
+								</DropArea>
 							</Column>
 							<Column span={6}>
 								<Preview dangerouslySetInnerHTML={{ __html: svgString }} />

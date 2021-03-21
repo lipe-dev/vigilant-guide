@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
 export default styled.div`
-	margin: 0 auto;
 	width: 300px;
+	margin: 0 auto;
 `

@@ -1,0 +1,3 @@
+{
+  "extends": ["@loadsmart/stylelint-config"]
+}
