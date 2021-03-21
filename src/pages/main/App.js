@@ -1,8 +1,22 @@
-import React, {useEffect, useRef, useState, useCallback} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {useDropzone} from "react-dropzone";
 
 import drawing from '../../assets/Op1.svg'
-import GlobalStyles from "../../components/GlobalStyles/GlobalStyles";
+import GlobalStyles from "../../components/GlobalStyles";
+import {Layout} from "../../components/Layout/Layout";
+import {Row} from "../../components/Layout/Row";
+import {Title} from "../../components/Typography/Title";
+import {SubTitle} from "../../components/Typography/SubTitle";
+import {Card} from "../../components/Layout/Card";
+import {Column} from "../../components/Layout/Column";
+import {Input} from "../../components/Forms/Input";
+import {TextArea} from "../../components/Forms/TextArea";
+import {Label} from "../../components/Forms/Label";
+import {DropArea} from "../../components/Forms/DropArea";
+import {FileUpload} from "../../components/Forms/FileUpload";
+import {Preview} from "../../components/Preview/Preview";
+import {Button} from "../../components/Forms/Button";
+import {Footer} from "../../components/Typography/Footer";
 
 const parser = new DOMParser()
 const serializer = new XMLSerializer()
@@ -10,6 +24,7 @@ const serializer = new XMLSerializer()
 const App = () => {
     const [link, setLink] = useState('')
     const [text, setText] = useState('')
+    const [file, setFile] = useState('')
 
     const [svgString, setSvgString] = useState('')
 
@@ -21,6 +36,7 @@ const App = () => {
         fetch(drawing).then(result => {
             result.text().then(text => {
                 documentRef.current = parser.parseFromString(text, 'image/svg+xml')
+                setSvgString(serializer.serializeToString(documentRef.current.documentElement))
             })
         })
     }, [])
@@ -41,8 +57,8 @@ const App = () => {
                 const line = lines[index].trim()
                 const tspan = documentRef.current.createElementNS('http://www.w3.org/2000/svg', "tspan")
                 tspan.setAttributeNS(null, 'x', '50%')
-                tspan.setAttributeNS(null,'dy', index ? 100 : 0)
-                tspan.setAttributeNS(null,'text-anchor', 'middle')
+                tspan.setAttributeNS(null, 'dy', index ? 100 : 0)
+                tspan.setAttributeNS(null, 'text-anchor', 'middle')
                 const textEl = documentRef.current.createTextNode(line)
                 tspan.appendChild(textEl)
                 textNode.appendChild(tspan)
@@ -68,10 +84,10 @@ const App = () => {
 
         let win = window.URL || window.webkitURL || window;
         let img = new Image()
-        let blob = new Blob([svgString], { type: 'image/svg+xml'})
+        let blob = new Blob([svgString], {type: 'image/svg+xml'})
         let url = win.createObjectURL(blob)
 
-        img.src= url
+        img.src = url
         img.onload = () => {
             const canvas = document.createElement('canvas')
             let ctx = canvas.getContext('2d')
@@ -97,6 +113,8 @@ const App = () => {
 
     const onDrop = useCallback((acceptedFiles) => {
         acceptedFiles.forEach((file) => {
+            setFile(file.name)
+
             const reader = new FileReader()
 
             reader.onabort = () => console.log('file reading was aborted')
@@ -117,24 +135,54 @@ const App = () => {
     const {getRootProps, getInputProps} = useDropzone({onDrop})
 
     return (
-        <div>
-            <GlobalStyles />
+        <Layout>
+            <GlobalStyles/>
 
-            <textarea type="text" multiple onChange={changeText} value={text}/>
-            <input type="text" onChange={changeLink} value={link}/>
+            <Row>
+                <Column span={12}>
+                    <Title>Vigilant-Guide</Title>
+                    <SubTitle>A randomly named tool that only does a single very specific task.</SubTitle>
+                </Column>
+            </Row>
 
-            <div {...getRootProps()}>
-                <input {...getInputProps()} />
-                <p>Drag 'n' drop some files here, or click to select files</p>
-            </div>
+            <Row>
+                <Column span={12}>
+                    <Card>
+                        <Row>
+                            <Column span={6}>
+                                <Label>
+                                    Main Text
+                                    <TextArea type="text" multiple onChange={changeText} value={text}/>
+                                </Label>
 
-            {/*{!converting && <a download="image.png" href={download}>Click here to download</a>}*/}
-            <div style={{width: 300}} dangerouslySetInnerHTML={{__html: svgString}}/>
+                                <Label>
+                                    Short Link
+                                    <Input type="text" onChange={changeLink} value={link}/>
+                                </Label>
 
-            {/*<canvas width={1080} height={1920} ref={canvasRef}/>*/}
+                                <Label>
+                                    Background Image
+                                    <DropArea {...getRootProps()}>
+                                        <FileUpload {...getInputProps()} />
+                                        <DropArea.Text >{file || `Drag 'n' drop an image here, or click to select a file`}</DropArea.Text>
+                                    </DropArea>
+                                </Label>
+                            </Column>
+                            <Column span={6}>
+                                <Preview dangerouslySetInnerHTML={{__html: svgString}}/>
+                                <Button onClick={downloadImage}>Download Image</Button>
+                            </Column>
+                        </Row>
+                    </Card>
+                </Column>
+            </Row>
 
-            <button onClick={downloadImage}>Download Image</button>
-        </div>
+            <Row>
+                <Column span={12}>
+                    <Footer>Click <a href="https://lipe.dev/vigilant-guide">here</a> to read a very pretentious blog post in which I make a big deal about how I made this.</Footer>
+                </Column>
+            </Row>
+        </Layout>
     )
 }
 
