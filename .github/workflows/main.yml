@@ -22,18 +22,22 @@ jobs:
         with:
           node-version: '12.x'
 
-      # Build using react scripts build
-      - name: Install and Build 🔧
+      # Install dependencies
+      - name: Install 🔧
         run: |
           yarn install --frozen-lockfile
-          yarn build
-          touch build/.nojekyll
           
       # Lint code
-      - name: Lint and Fix 💅
+      - name: Eslint and StyleLint 💅
         run: |
           yarn stylelint:check
           yarn eslint:check
+          
+      # Build using react scripts build
+      - name: Build 🏗️
+        run: |
+          yarn build
+          touch build/.nojekyll
 
       # Deploy with/to github pages 🚀
       - name: GH Pages deploy
