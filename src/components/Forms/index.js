@@ -1,0 +1,6 @@
+export { default as Button } from './Button'
+export { default as DropArea } from './DropArea'
+export { default as FileUpload } from './FileUpload'
+export { default as Input } from './Input'
+export { default as Label } from './Label'
+export { default as TextArea } from './TextArea'

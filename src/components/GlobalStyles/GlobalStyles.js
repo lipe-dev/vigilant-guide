@@ -1,6 +1,6 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 
-const GlobalStyles = createGlobalStyle`
+export default createGlobalStyle`
       * {
         font-family: 'Nunito', sans-serif;
         transition: .3s;
@@ -10,5 +10,3 @@ const GlobalStyles = createGlobalStyle`
         background: #0B7A75;
       }
 `
-
-export default GlobalStyles
