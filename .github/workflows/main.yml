@@ -35,11 +35,12 @@ jobs:
           yarn stylelint:check
           yarn eslint:check
 
-      # Deploy with/to github pages
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+      # Deploy with/to github pages 🚀
+      - name: GH Pages deploy
+      # You may pin to the exact commit or the version.
+        uses: Cecilapp/GitHub-Pages-deploy@3.1.0
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
-          CLEAN: true # Auto-Remove deleted files from the deploy branch
+        # A verified email.
+          email: lipe.icp@gmail.com
+          # Where static files are.
+          build_dir: build
