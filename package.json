@@ -26,8 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "stylelint:fix": "stylelint 'src/**/*.*' --fix",
-    "stylelint:check": "stylelint 'src/**/*.*'",
+    "stylelint:fix": "stylelint 'src/**/*.js' --fix",
+    "stylelint:check": "stylelint 'src/**/*.js'",
     "eslint:fix": "eslint 'src/**/*.js' --fix",
     "eslint:check": "eslint 'src/**/*.js'"
   },
