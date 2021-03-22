@@ -2,6 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import drawing from '../../assets/Op1.svg'
+
+import bg0 from '../../assets/image-0.png'
+import bg1 from '../../assets/image-1.png'
+
 import GlobalStyles from '../../components/GlobalStyles'
 import Layout, { Row, Card, Column } from '../../components/Layout'
 import { Title, SubTitle, Footer } from '../../components/Typography'
@@ -17,9 +21,13 @@ import Preview from '../../components/Preview'
 const parser = new DOMParser()
 const serializer = new XMLSerializer()
 
+const imgs = [bg0, bg1]
+
 const Main = () => {
 	const [link, setLink] = useState('')
 	const [text, setText] = useState('')
+
+	// const [useRandomImage, setUseRandomImage] = useState(false)
 
 	const [svgString, setSvgString] = useState('')
 
@@ -124,8 +132,6 @@ const Main = () => {
 			reader.onload = () => {
 				const image = documentRef.current.getElementById('background-image')
 
-				console.log(reader.result)
-
 				image.setAttributeNS(
 					'http://www.w3.org/1999/xlink',
 					'href',
@@ -140,6 +146,41 @@ const Main = () => {
 		})
 	}, [])
 	const { getRootProps, getInputProps } = useDropzone({ onDrop })
+
+	const useRandomImageCallback = () => {
+		const image = documentRef.current.getElementById('background-image')
+
+		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', bg0)
+
+		const rand = Math.floor(Math.random() * 2)
+
+		fetch(imgs[rand])
+			.then((response) => response.blob())
+			.then((blob) => {
+				const reader = new FileReader()
+
+				reader.onabort = () => console.log('file reading was aborted')
+				reader.onerror = () => console.log('file reading has failed')
+				reader.onload = () => {
+					const image = documentRef.current.getElementById('background-image')
+
+					image.setAttributeNS(
+						'http://www.w3.org/1999/xlink',
+						'href',
+						Buffer.from(reader.result).toString()
+					)
+
+					setSvgString(
+						serializer.serializeToString(documentRef.current.documentElement)
+					)
+				}
+				reader.readAsDataURL(blob)
+			})
+
+		setSvgString(
+			serializer.serializeToString(documentRef.current.documentElement)
+		)
+	}
 
 	return (
 		<Layout>
@@ -175,6 +216,12 @@ const Main = () => {
 								</Label>
 
 								<Label htmlFor='#fileInput'>Background Image</Label>
+								<Button onClick={useRandomImageCallback}>
+									Use random image
+								</Button>
+
+								<Title black>or</Title>
+
 								<DropArea {...getRootProps()}>
 									<input {...getInputProps()} id='fileInput' />
 									<p>
